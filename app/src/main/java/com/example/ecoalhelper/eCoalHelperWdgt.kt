@@ -3,7 +3,10 @@ package com.example.ecoalhelper
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
+import android.os.Bundle
 import android.widget.RemoteViews
+import kotlinx.coroutines.runBlocking
+import kotlin.random.Random
 
 /**
  * Implementation of App Widget functionality.
@@ -16,6 +19,17 @@ class eCoalHelperWdgt : AppWidgetProvider() {
             updateAppWidget(context, appWidgetManager, appWidgetId)
         }
     }
+
+    /*
+    override fun onAppWidgetOptionsChanged(
+        context: Context?,
+        appWidgetManager: AppWidgetManager?,
+        appWidgetId: Int,
+        newOptions: Bundle?
+    ) {
+        super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions)
+    }
+*/
 
 override fun onDeleted(context: Context, appWidgetIds: IntArray) {
         // When the user deletes the widget, delete the preference associated with it.
@@ -30,13 +44,36 @@ override fun onDeleted(context: Context, appWidgetIds: IntArray) {
     override fun onDisabled(context: Context) {
         // Enter relevant functionality for when the last widget is disabled
     }
+
 }
 
 internal fun updateAppWidget(context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int) {
-    val widgetText = loadTitlePref(context, appWidgetId)
+    var widgetText = loadTitlePref(context, appWidgetId)
     // Construct the RemoteViews object
     val views = RemoteViews(context.packageName, R.layout.e_coal_helper_wdgt)
+    //views.setTextViewText(R.id.appwidget_text, Random.nextInt().toString())
+
+    //val adr = AlwaysDataReader()
+    //adr.start()
+
+    val adr = AlwaysDataReader()
+    //adr.coDoWork()
+    runBlocking {
+        adr.connection()
+    }
+/*
+    widgetText = if(adr.con_state())
+    {
+        "Connected"
+    }
+    else
+    {
+        "Nope"
+    }
+
+ */
     views.setTextViewText(R.id.appwidget_text, widgetText)
+
 
     // Instruct the widget manager to update the widget
     appWidgetManager.updateAppWidget(appWidgetId, views)

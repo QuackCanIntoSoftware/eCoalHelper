@@ -32,6 +32,7 @@ class eCoalHelperWdgtConfigureActivity : Activity() {
         setResult(RESULT_OK, resultValue)
         finish()
     }
+
 private lateinit var binding: ECoalHelperWdgtConfigureBinding
 
     public override fun onCreate(icicle: Bundle?) {
