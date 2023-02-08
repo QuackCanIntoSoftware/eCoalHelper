@@ -3,10 +3,8 @@ package com.example.ecoalhelper
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
-import android.os.Bundle
 import android.widget.RemoteViews
-import kotlinx.coroutines.runBlocking
-import kotlin.random.Random
+import java.sql.ResultSet
 
 /**
  * Implementation of App Widget functionality.
@@ -49,29 +47,14 @@ override fun onDeleted(context: Context, appWidgetIds: IntArray) {
 
 internal fun updateAppWidget(context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int) {
     var widgetText = loadTitlePref(context, appWidgetId)
+
     // Construct the RemoteViews object
     val views = RemoteViews(context.packageName, R.layout.e_coal_helper_wdgt)
-    //views.setTextViewText(R.id.appwidget_text, Random.nextInt().toString())
-
-    //val adr = AlwaysDataReader()
-    //adr.start()
 
     val adr = AlwaysDataReader()
-    //adr.coDoWork()
-    runBlocking {
-        adr.connection()
-    }
-/*
-    widgetText = if(adr.con_state())
-    {
-        "Connected"
-    }
-    else
-    {
-        "Nope"
-    }
 
- */
+    val results: ResultSet? = adr.readOgnikLog()
+
     views.setTextViewText(R.id.appwidget_text, widgetText)
 
 
