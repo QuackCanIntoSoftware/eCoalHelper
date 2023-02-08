@@ -23,6 +23,7 @@ class AlwaysDataReader{
         private const val DB_USER = "ecoal"
         private const val DB_PSWD = "ognik02"
         private const val DB_READ_ALL = "select * from ognik_log order by ts;"
+        private const val DB_READ_LAST = "select * from ognik_log order by ts desc limit 1;"
     }
 
     private lateinit var connection: Connection
@@ -102,4 +103,11 @@ class AlwaysDataReader{
         return result
     }
 
+    fun readLastState(): ResultSet? {
+        var result : ResultSet? = null
+        runBlocking {
+            result = sendSqlQuery(DB_READ_LAST)
+        }
+        return result
+    }
 }

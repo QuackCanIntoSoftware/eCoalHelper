@@ -3,6 +3,7 @@ package com.example.ecoalhelper
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
+import android.util.Log
 import android.widget.RemoteViews
 import java.sql.ResultSet
 
@@ -53,9 +54,18 @@ internal fun updateAppWidget(context: Context, appWidgetManager: AppWidgetManage
 
     val adr = AlwaysDataReader()
 
-    val results: ResultSet? = adr.readOgnikLog()
+    val resultLast: ResultSet? = adr.readLastState()
 
-    views.setTextViewText(R.id.appwidget_text, widgetText)
+    if (resultLast != null){
+        val lastRecord = eCoalDecoder(resultLast).getLatestRecord()
+        views.setTextViewText(R.id.appwidget_text, lastRecord.timestamp.toString())
+        views.setTextViewText(R.id.FuelLevel, lastRecord.fuelLevel.toString())
+
+    }
+    else {
+        Log.wtf("UpdateAppWidget", "Last results are null!!")
+    }
+
 
 
     // Instruct the widget manager to update the widget
