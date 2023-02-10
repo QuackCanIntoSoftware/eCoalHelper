@@ -58,7 +58,7 @@ internal fun updateAppWidget(context: Context, appWidgetManager: AppWidgetManage
 
     if (resultLast != null){
         val lastRecord = eCoalDecoder(resultLast).getLatestRecord()
-        views.setTextViewText(R.id.appwidget_text, lastRecord.timestamp.toString())
+        // views.setTextViewText(R.id.appwidget_text, lastRecord.timestamp.toString())
         views.setTextViewText(R.id.FuelLevel, lastRecord.fuelLevel.toString())
 
     }
