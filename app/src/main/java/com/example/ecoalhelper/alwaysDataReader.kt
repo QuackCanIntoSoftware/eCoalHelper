@@ -27,7 +27,7 @@ class AlwaysDataReader{
     }
 
     private lateinit var connection: Connection
-    private var connectionStatus = ConnectionStates.None
+    var connectionStatus = ConnectionStates.None
 
     init {
         runBlocking {

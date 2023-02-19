@@ -13,4 +13,10 @@
     <string name="configure">Configure</string>
     <string name="add_widget">Add widget</string>
     <string name="app_widget_description">This is an app widget description</string>
+    <string name="notif_warn_channel_id">notif_ch_fuel</string>
+    <string name="notif_warn_channel_name">Fuel warning</string>
+    <string name="notif_warn_channel_desc">Notification channel for fuel level related warnings</string>
+    <string name="notif_alarm_channel_id">notif_ch_alarm</string>
+    <string name="notif_alarm_channel_name">Alarm notifications</string>
+    <string name="notif_alarm_channel_desc">Notification channel for alarms. Common for empty fuel and boiler state</string>
 </resources>

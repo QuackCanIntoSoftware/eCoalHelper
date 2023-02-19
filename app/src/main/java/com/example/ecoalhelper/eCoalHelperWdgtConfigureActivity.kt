@@ -1,9 +1,12 @@
 package com.example.ecoalhelper
 
 import android.app.Activity
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.EditText
@@ -33,7 +36,36 @@ class eCoalHelperWdgtConfigureActivity : Activity() {
         finish()
     }
 
-private lateinit var binding: ECoalHelperWdgtConfigureBinding
+    private fun createNotificationChannels(context: Context) {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val warnChannel = NotificationChannel(
+                context.getString(R.string.notif_warn_channel_id),      // ID
+                context.getString(R.string.notif_warn_channel_name),    // name
+                NotificationManager.IMPORTANCE_DEFAULT                  // importance
+            ).apply {
+                    description = context.getString(R.string.notif_warn_channel_desc)
+            }
+
+            val alarmChannel = NotificationChannel(
+                context.getString(R.string.notif_alarm_channel_id),      // ID
+                context.getString(R.string.notif_alarm_channel_name),    // name
+                NotificationManager.IMPORTANCE_HIGH                      // importance
+            ).apply {
+                    description = context.getString(R.string.notif_alarm_channel_desc)
+            }
+
+
+            // Register the channel with the system
+            val notificationManager: NotificationManager =
+                context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+            notificationManager.createNotificationChannels(listOf(warnChannel, alarmChannel))
+        }
+    }
+
+    private lateinit var binding: ECoalHelperWdgtConfigureBinding
 
     public override fun onCreate(icicle: Bundle?) {
         super.onCreate(icicle)
@@ -42,8 +74,8 @@ private lateinit var binding: ECoalHelperWdgtConfigureBinding
         // out of the widget placement if the user presses the back button.
         setResult(RESULT_CANCELED)
 
-     binding = ECoalHelperWdgtConfigureBinding.inflate(layoutInflater)
-     setContentView(binding.root)
+        binding = ECoalHelperWdgtConfigureBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         appWidgetText = binding.appwidgetText as EditText
         binding.addButton.setOnClickListener(onClickListener)
@@ -53,7 +85,8 @@ private lateinit var binding: ECoalHelperWdgtConfigureBinding
         val extras = intent.extras
         if (extras != null) {
             appWidgetId = extras.getInt(
-                    AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID)
+                AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID
+            )
         }
 
         // If this activity was started with an intent without an app widget ID, finish with an error.
@@ -63,6 +96,8 @@ private lateinit var binding: ECoalHelperWdgtConfigureBinding
         }
 
         appWidgetText.setText(loadTitlePref(this@eCoalHelperWdgtConfigureActivity, appWidgetId))
+
+        createNotificationChannels(applicationContext)
     }
 
 }
