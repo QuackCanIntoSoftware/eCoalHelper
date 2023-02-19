@@ -3,7 +3,7 @@
     android:minWidth="110dp"
     android:minHeight="40dp"
     android:updatePeriodMillis="1800000"
-    android:previewImage="@drawable/example_appwidget_preview"
+    android:previewImage="@drawable/preview"
     android:initialLayout="@layout/e_coal_helper_wdgt"
     android:description="@string/app_widget_description"
     android:configure="com.example.ecoalhelper.eCoalHelperWdgtConfigureActivity"
