@@ -19,4 +19,12 @@
     <string name="notif_alarm_channel_id">notif_ch_alarm</string>
     <string name="notif_alarm_channel_name">Alarm notifications</string>
     <string name="notif_alarm_channel_desc">Notification channel for alarms. Common for empty fuel and boiler state</string>
+    <string name="fuel_low_level_title">Low fuel level</string>
+    <string name="fuel_low_level_desc">Fuel level is %d. Fuel will deplete around %ta %tb %td %tH:%tM</string>
+    <string name="mode_alarm_title">Alarm</string>
+    <string name="mode_alarm_description">Boiler is in ALARM state!!</string>
+    <string name="mode_manual_title">Manual</string>
+    <string name="mode_manual_description">Boiler is in manual operation mode</string>
+    <string name="connection_timeout_title">Connection timeout</string>
+    <string name="connection_timeout_description">Last successful connection was %d hours ago</string>
 </resources>

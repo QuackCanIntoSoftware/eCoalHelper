@@ -18,7 +18,7 @@ import com.example.ecoalhelper.databinding.ECoalHelperWdgtConfigureBinding
 class eCoalHelperWdgtConfigureActivity : Activity() {
     private var appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID
     private lateinit var appWidgetText: EditText
-    private var onClickListener = View.OnClickListener {
+    internal var onClickListener = View.OnClickListener {
         val context = this@eCoalHelperWdgtConfigureActivity
 
         // When the button is clicked, store the string locally

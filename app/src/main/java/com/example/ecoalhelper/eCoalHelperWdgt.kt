@@ -5,15 +5,16 @@ import android.app.NotificationManager
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
-import android.content.Intent
 import android.os.Build
 import android.util.Log
 import android.widget.RemoteViews
-import android.widget.TextView
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import androidx.core.widget.TextViewCompat
 import java.sql.ResultSet
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
+
 
 /**
  * Implementation of App Widget functionality.
@@ -64,45 +65,117 @@ internal fun setConnectionStatus(view: RemoteViews, connectionStatus: Connection
     //}
 }
 
-private fun createNotificationChannel(context: Context) {
-    // Create the NotificationChannel, but only on API 26+ because
-    // the NotificationChannel class is new and not in the support library
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        val name = "kurwa"//R.string.alarm_channel_name
-        val descriptionText =  "Mac" //R.string.alarm_channel_description
-        val importance = NotificationManager.IMPORTANCE_DEFAULT
-        val channel = NotificationChannel("eCoalChannel", name, importance).apply {
-            description = descriptionText
-        }
-        // Register the channel with the system
-        val notificationManager: NotificationManager =
-            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.createNotificationChannel(channel)
-    }
-}
-
-
-internal fun processNotifications(context: Context, record: eCoalRecord) {
-    // createNotificationChannel(context)
-
-    val builder = NotificationCompat.Builder(context, context.getString(R.string.notif_alarm_channel_id))
-        .setSmallIcon(R.drawable.notification_icon)
-        .setContentTitle(context.getString(R.string.notif_alarm_channel_name))
-        .setContentText("Alarm")
-        .setPriority(NotificationCompat.PRIORITY_HIGH)
-
-    val builder2 = NotificationCompat.Builder(context, context.getString(R.string.notif_warn_channel_id))
-        .setSmallIcon(R.drawable.notification_icon)
-        .setContentTitle(context.getString(R.string.notif_warn_channel_name))
-        .setContentText("Warning")
-        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+private fun sendWarningNotification(context: Context, id: Int, title: String, desc: String) {
+    val builder =
+        NotificationCompat.Builder(context, context.getString(R.string.notif_warn_channel_id))
+            .setSmallIcon(R.drawable.notification_icon)
+            .setContentTitle(title)
+            .setContentText(desc)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setStyle(NotificationCompat.BigTextStyle()
+                .bigText(desc))
 
     with(NotificationManagerCompat.from(context)) {
         // notificationId is a unique int for each notification that you must define
-        notify(1, builder.build())
-        notify(2, builder2.build())
+        notify(id, builder.build())
+    }
+}
+
+private fun sendAlarmNotification(context: Context, id: Int, title: String, desc: String){
+    val builder = NotificationCompat.Builder(context, context.getString(R.string.notif_alarm_channel_id))
+        .setSmallIcon(R.drawable.notification_icon)
+        .setContentTitle(title)
+        .setContentText(desc)
+        .setPriority(NotificationCompat.PRIORITY_HIGH)
+        .setStyle(NotificationCompat.BigTextStyle()
+            .bigText(desc))
+
+
+    with(NotificationManagerCompat.from(context)) {
+        // notificationId is a unique int for each notification that you must define
+        notify(id, builder.build())
+    }
+}
+
+private fun checkFuelLevel(context: Context, record: eCoalRecord){
+    /* Verify fuel level */
+    /* Alarm level */
+    if (record.fuelLevel < 20) {
+        sendAlarmNotification(context,
+            context.resources.getInteger(R.integer.notif_id_fuel_level_alarm),
+            context.getString(R.string.fuel_low_level_title),
+            String.format(context.getString(R.string.fuel_low_level_desc),
+                record.fuelLevel,
+                record.fuelDepletionTime,
+                record.fuelDepletionTime,
+                record.fuelDepletionTime,
+                record.fuelDepletionTime,
+                record.fuelDepletionTime
+            )
+        )
+    } else if (record.fuelLevel < 50) {
+        /* Warning level */
+        sendWarningNotification(context,
+            context.resources.getInteger(R.integer.notif_id_fuel_level_warning),
+            context.getString(R.string.fuel_low_level_title),
+            String.format(context.getString(R.string.fuel_low_level_desc),
+                record.fuelLevel,
+                record.fuelDepletionTime,
+                record.fuelDepletionTime,
+                record.fuelDepletionTime,
+                record.fuelDepletionTime,
+                record.fuelDepletionTime
+            )
+        )
+    }
+}
+
+private fun checkAlarmStatus(context: Context, record: eCoalRecord){
+    if (record.mode == eCoalModes.Alarm) {
+        sendAlarmNotification(
+            context,
+            context.resources.getInteger(R.integer.notif_id_mode_sts_alarm),
+            context.getString(R.string.mode_alarm_title),
+            context.getString(R.string.mode_alarm_description)
+        )
+    }
+    else if (record.mode == eCoalModes.Manual) {
+        sendWarningNotification(
+            context,
+            context.resources.getInteger(R.integer.notif_id_mode_sts_warning),
+            context.getString(R.string.mode_manual_title),
+            context.getString(R.string.mode_manual_description)
+        )
+    }
+}
+
+private fun checkConnection(context: Context, record: eCoalRecord, conSts: ConnectionStates) {
+
+    val ts = LocalDateTime.parse(record.timestamp.toString(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S"))
+    val now = LocalDateTime.now() //.format(DateTimeFormatter.ofPattern("yyyy-MM-ddTHH:mm"))
+    val hoursElapsed = ts.until(now, ChronoUnit.HOURS)
+
+    if ((hoursElapsed >= 2) || (conSts != ConnectionStates.Connected)) {
+        sendWarningNotification(
+            context,
+            context.resources.getInteger(R.integer.notif_id_coms_sts_warning),
+            context.getString(R.string.connection_timeout_title),
+            context.getString(R.string.connection_timeout_description).format(hoursElapsed)
+        )
+    }
+    else {
+        with(NotificationManagerCompat.from(context)) {
+            // notificationId is a unique int for each notification that you must define
+            cancel(context.resources.getInteger(R.integer.notif_id_coms_sts_warning))
+        }
     }
 
+}
+
+private fun processNotifications(context: Context, record: eCoalRecord, conSts: ConnectionStates) {
+    checkFuelLevel(context, record)
+    checkAlarmStatus(context, record)
+    checkConnection(context, record, conSts)
 }
 
 internal fun updateAppWidget(context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int) {
@@ -123,15 +196,13 @@ internal fun updateAppWidget(context: Context, appWidgetManager: AppWidgetManage
         views.setTextViewText(R.id.LoadTime, lastRecord.nextFuelTime.toString())
         views.setTextViewText(R.id.State, lastRecord.mode.toString())
 
-        processNotifications(context, lastRecord)
+        processNotifications(context, lastRecord, adr.connectionStatus)
 
 
     }
     else {
         Log.wtf("UpdateAppWidget", "Last results are null!!")
     }
-
-
 
     // Instruct the widget manager to update the widget
     appWidgetManager.updateAppWidget(appWidgetId, views)

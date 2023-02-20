@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="fuel_low_level_title">Niski poziom paliwa</string>
+    <string name="fuel_low_level_desc">Fuel level is %d. Fuel will deplete around %ta %td %tb %tH:%tM</string>
+
+
+</resources>

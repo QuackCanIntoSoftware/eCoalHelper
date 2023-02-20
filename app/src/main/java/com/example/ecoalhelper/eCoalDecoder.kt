@@ -24,14 +24,11 @@ class eCoalRecord (private val ts: Timestamp, val mode: eCoalModes, val fuel: In
     var timestamp = Timestamp(0)
         get() = this.ts
 
-    //var mode = eCoalModes.Alarm
-    //    get() = this.mode
-
     var fuelLevel = 0
         get() = this.fuel
 
-    //var nextFuelTime = Timestamp(0)
-    //    get() = this.nextFuelTime
+    var fuelDepletionTime = Timestamp(0)
+        get() = this.nextFuelTime
 
 
 }
