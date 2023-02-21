@@ -5,4 +5,7 @@
     <integer name="notif_id_mode_sts_alarm">3</integer>
     <integer name="notif_id_mode_sts_warning">3</integer>
     <integer name="notif_id_coms_sts_warning">5</integer>
+    <integer name="dflt_fuel_level_alarm">0</integer>
+    <integer name="dflt_fuel_level_warning">30</integer>
+    <integer name="dflt_conn_timeout">2</integer>
 </resources>

@@ -24,7 +24,7 @@
             android:resource="@drawable/notification_icon" />
 
         <receiver
-            android:name=".eCoalHelperWdgt"
+            android:name="com.quack.ecoalhelper.eCoalHelperWdgt"
             android:exported="false" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -36,7 +36,7 @@
         </receiver>
 
         <activity
-            android:name=".eCoalHelperWdgtConfigureActivity"
+            android:name="com.quack.ecoalhelper.eCoalHelperWdgtConfigureActivity"
             android:exported="false" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />

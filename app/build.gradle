@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace 'com.example.ecoalhelper'
+    namespace 'com.quack.ecoalhelper'
     compileSdk 32
 
     defaultConfig {
-        applicationId "com.example.ecoalhelper"
+        applicationId "com.quack.ecoalhelper"
         minSdk 30
         targetSdk 32
         versionCode 1

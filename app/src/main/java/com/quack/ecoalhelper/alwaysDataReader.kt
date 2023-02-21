@@ -1,4 +1,4 @@
-package com.example.ecoalhelper
+package com.quack.ecoalhelper
 
 import android.database.SQLException
 import android.util.Log

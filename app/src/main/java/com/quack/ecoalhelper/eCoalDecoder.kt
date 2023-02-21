@@ -1,4 +1,4 @@
-package com.example.ecoalhelper
+package com.quack.ecoalhelper
 
 import java.sql.ResultSet
 import android.util.Log
@@ -30,7 +30,6 @@ class eCoalRecord (private val ts: Timestamp, val mode: eCoalModes, val fuel: In
     var fuelDepletionTime = Timestamp(0)
         get() = this.nextFuelTime
 
-
 }
 
 class eCoalDecoder (input: ResultSet) {
@@ -40,7 +39,7 @@ class eCoalDecoder (input: ResultSet) {
         Log.d(TAG, "Initializing eCoalDecoder")
     }
 
-    fun getLatestRecord(): eCoalRecord{
+    fun getLatestRecord(): eCoalRecord {
         set.last()
         var ts = set.getTimestamp("ts")
         var mode: eCoalModes = eCoalModes.values()[set.getInt("tryb_auto_state")]

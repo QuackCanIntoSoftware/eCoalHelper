@@ -1,11 +1,8 @@
-package com.example.ecoalhelper
+package com.quack.ecoalhelper
 
-import android.app.NotificationChannel
-import android.app.NotificationManager
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
-import android.os.Build
 import android.util.Log
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
@@ -44,7 +41,7 @@ class eCoalHelperWdgt : AppWidgetProvider() {
 override fun onDeleted(context: Context, appWidgetIds: IntArray) {
         // When the user deletes the widget, delete the preference associated with it.
         for (appWidgetId in appWidgetIds) {
-            deleteTitlePref(context, appWidgetId)
+            deletePrefs(context, appWidgetId)
         }
     }
     override fun onEnabled(context: Context) {
@@ -97,10 +94,10 @@ private fun sendAlarmNotification(context: Context, id: Int, title: String, desc
     }
 }
 
-private fun checkFuelLevel(context: Context, record: eCoalRecord){
+private fun checkFuelLevel(context: Context, record: eCoalRecord, prefs: eCoalPrefs){
     /* Verify fuel level */
     /* Alarm level */
-    if (record.fuelLevel < 20) {
+    if (record.fuelLevel < prefs.fuelLevelAlarm) {
         sendAlarmNotification(context,
             context.resources.getInteger(R.integer.notif_id_fuel_level_alarm),
             context.getString(R.string.fuel_low_level_title),
@@ -113,7 +110,7 @@ private fun checkFuelLevel(context: Context, record: eCoalRecord){
                 record.fuelDepletionTime
             )
         )
-    } else if (record.fuelLevel < 50) {
+    } else if (record.fuelLevel < prefs.fuelLevelWarning) {
         /* Warning level */
         sendWarningNotification(context,
             context.resources.getInteger(R.integer.notif_id_fuel_level_warning),
@@ -149,13 +146,14 @@ private fun checkAlarmStatus(context: Context, record: eCoalRecord){
     }
 }
 
-private fun checkConnection(context: Context, record: eCoalRecord, conSts: ConnectionStates) {
+private fun checkConnection(context: Context, record: eCoalRecord, conSts: ConnectionStates, prefs: eCoalPrefs) {
 
     val ts = LocalDateTime.parse(record.timestamp.toString(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S"))
     val now = LocalDateTime.now() //.format(DateTimeFormatter.ofPattern("yyyy-MM-ddTHH:mm"))
     val hoursElapsed = ts.until(now, ChronoUnit.HOURS)
 
-    if ((hoursElapsed >= 2) || (conSts != ConnectionStates.Connected)) {
+
+    if ((hoursElapsed >= prefs.timeout) || (conSts != ConnectionStates.Connected)) {
         sendWarningNotification(
             context,
             context.resources.getInteger(R.integer.notif_id_coms_sts_warning),
@@ -172,10 +170,11 @@ private fun checkConnection(context: Context, record: eCoalRecord, conSts: Conne
 
 }
 
-private fun processNotifications(context: Context, record: eCoalRecord, conSts: ConnectionStates) {
-    checkFuelLevel(context, record)
+private fun processNotifications(context: Context, record: eCoalRecord, conSts: ConnectionStates, appWidgetId: Int) {
+    val prefs = loadPrefs(context, appWidgetId)
+    checkFuelLevel(context, record, prefs)
     checkAlarmStatus(context, record)
-    checkConnection(context, record, conSts)
+    checkConnection(context, record, conSts, prefs)
 }
 
 internal fun updateAppWidget(context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int) {
@@ -196,7 +195,7 @@ internal fun updateAppWidget(context: Context, appWidgetManager: AppWidgetManage
         views.setTextViewText(R.id.LoadTime, lastRecord.nextFuelTime.toString())
         views.setTextViewText(R.id.State, lastRecord.mode.toString())
 
-        processNotifications(context, lastRecord, adr.connectionStatus)
+        processNotifications(context, lastRecord, adr.connectionStatus, appWidgetId)
 
 
     }

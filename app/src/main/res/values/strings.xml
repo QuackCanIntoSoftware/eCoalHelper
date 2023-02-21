@@ -1,22 +1,18 @@
 <resources>
-    <string name="app_name">eCoalHelper</string>
-    <string name="action_settings">Settings</string>
-    <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
+    <!-- not translatable, common strings -->
+    <string name="app_name" translatable="false">eCoalHelper</string>
+    <string name="btn_OK" translatable="false">OK</string>
+    <string name="notif_warn_channel_id" translatable="false">notif_ch_warning</string>
+    <string name="notif_alarm_channel_id" translatable="false">notif_ch_alarm</string>
+    <string name="pref_fuel_level_alarm" translatable="false">fuel_level_alarm</string>
+    <string name="pref_fuel_level_warning" translatable="false">fuel_level_warning</string>
+    <string name="pref_timeout" translatable="false">timeout</string>
 
-    <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
-    <string name="appwidget_text">EXAMPLE</string>
-    <string name="configure">Configure</string>
-    <string name="add_widget">Add widget</string>
-    <string name="app_widget_description">This is an app widget description</string>
-    <string name="notif_warn_channel_id">notif_ch_fuel</string>
-    <string name="notif_warn_channel_name">Fuel warning</string>
-    <string name="notif_warn_channel_desc">Notification channel for fuel level related warnings</string>
-    <string name="notif_alarm_channel_id">notif_ch_alarm</string>
+    <!-- language specific strings -->
+    <string name="action_settings">Settings</string>
+    <string name="app_widget_description">eCoal boiler monitor widget</string>
+    <string name="notif_warn_channel_name">Warning notification</string>
+    <string name="notif_warn_channel_desc">Notification channel for warning messages</string>
     <string name="notif_alarm_channel_name">Alarm notifications</string>
     <string name="notif_alarm_channel_desc">Notification channel for alarms. Common for empty fuel and boiler state</string>
     <string name="fuel_low_level_title">Low fuel level</string>
@@ -27,4 +23,8 @@
     <string name="mode_manual_description">Boiler is in manual operation mode</string>
     <string name="connection_timeout_title">Connection timeout</string>
     <string name="connection_timeout_description">Last successful connection was %d hours ago</string>
+    <string name="lb_fuel_level_warning">Low fuel level warning limit</string>
+    <string name="lb_fuel_level_alarm">Low fuel level alarm limit</string>
+    <string name="lb_timeout">Read timeout (h)</string>
+    <string name="toast_invalid_parameters"><![CDATA[Fuel levels shall fit range <0, 100>.\nAlarm level shall be less than warning.\nTimeout shall be grated than 0]]></string>
 </resources>
