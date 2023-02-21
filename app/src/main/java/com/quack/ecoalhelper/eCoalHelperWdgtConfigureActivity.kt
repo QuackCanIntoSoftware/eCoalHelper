@@ -29,16 +29,15 @@ class eCoalHelperWdgtConfigureActivity : Activity() {
 
         /* When the button is clicked, get value, validate and save */
 
-        val prefs = eCoalPrefs(
-            txFuelLevelWarning.text.toString().toInt(),
-            txFuelLevelAlarm.text.toString().toInt(),
-            txTimeout.text.toString().toInt()
-        )
+        val prefs = eCoalPrefs(context, appWidgetId)
+        prefs.fuelLevelWarning = txFuelLevelWarning.text.toString().toInt()
+        prefs.fuelLevelAlarm = txFuelLevelAlarm.text.toString().toInt()
+        prefs.timeout = txTimeout.text.toString().toInt()
 
         if (prefs.validate())
         {
             /* If preferences are valid, save and close */
-            savePrefs(context, appWidgetId, prefs)
+            prefs.savePrefs()
 
             // It is the responsibility of the configuration activity to update the app widget
             val appWidgetManager = AppWidgetManager.getInstance(context)
@@ -122,7 +121,7 @@ class eCoalHelperWdgtConfigureActivity : Activity() {
         }
 
         /* Load preferences */
-        val prefs = loadPrefs(this@eCoalHelperWdgtConfigureActivity, appWidgetId)
+        val prefs = eCoalPrefs(this@eCoalHelperWdgtConfigureActivity, appWidgetId)
         txTimeout.setText(prefs.timeout.toString())
         txFuelLevelAlarm.setText(prefs.fuelLevelAlarm.toString())
         txFuelLevelWarning.setText(prefs.fuelLevelWarning.toString())
@@ -130,48 +129,4 @@ class eCoalHelperWdgtConfigureActivity : Activity() {
         createNotificationChannels(applicationContext)
     }
 
-    private fun prefsKey(pref: String): String {
-        return PREF_PREFIX_KEY + appWidgetId
-    }
-}
-
-private const val PREFS_NAME = "com.quack.ecoalhelper.eCoalHelperWdgt"
-private const val PREF_PREFIX_KEY = "appwidget_"
-
-
-/* Save preferences with prefix and widget id to have separate setting for every created widget */
-internal fun savePrefs(context: Context, appWidgetId: Int, input: eCoalPrefs) {
-    val prefs = context.getSharedPreferences(PREFS_NAME, 0).edit()
-    prefs.putInt(PREF_PREFIX_KEY + appWidgetId + context.getString(R.string.pref_fuel_level_alarm), input.fuelLevelAlarm)
-    prefs.putInt(PREF_PREFIX_KEY + appWidgetId + context.getString(R.string.pref_fuel_level_warning), input.fuelLevelWarning)
-    prefs.putInt(PREF_PREFIX_KEY + appWidgetId + context.getString(R.string.pref_timeout), input.timeout)
-    prefs.apply()
-}
-
-/* Read the prefix from the SharedPreferences object for this widget. */
-/* If there is no preference saved, get the default from a resource */
-internal fun loadPrefs(context: Context, appWidgetId: Int): eCoalPrefs {
-    val prefs = context.getSharedPreferences(PREFS_NAME, 0)
-    val fuelAlarm = prefs.getInt(
-        PREF_PREFIX_KEY + appWidgetId + context.getString(R.string.pref_fuel_level_alarm), context.resources.getInteger(
-            R.integer.dflt_fuel_level_alarm
-        ))
-    val fuelWarn = prefs.getInt(
-        PREF_PREFIX_KEY + appWidgetId + context.getString(R.string.pref_fuel_level_warning), context.resources.getInteger(
-            R.integer.dflt_fuel_level_warning
-        ))
-    val timeout = prefs.getInt(
-        PREF_PREFIX_KEY + appWidgetId + context.getString(R.string.pref_timeout), context.resources.getInteger(
-            R.integer.dflt_conn_timeout
-        ))
-    return eCoalPrefs(fuelWarn, fuelAlarm, timeout)
-}
-
-/* Delete preferences on object destroy */
-internal fun deletePrefs(context: Context, appWidgetId: Int) {
-    val prefs = context.getSharedPreferences(PREFS_NAME, 0).edit()
-    prefs.remove(PREF_PREFIX_KEY + appWidgetId + context.getString(R.string.pref_fuel_level_alarm))
-    prefs.remove(PREF_PREFIX_KEY + appWidgetId + context.getString(R.string.pref_fuel_level_warning))
-    prefs.remove(PREF_PREFIX_KEY + appWidgetId + context.getString(R.string.pref_timeout))
-    prefs.apply()
 }

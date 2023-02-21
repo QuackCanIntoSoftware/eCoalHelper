@@ -35,13 +35,13 @@ class eCoalHelperWdgt : AppWidgetProvider() {
     ) {
         super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions)
     }
-*/
+    */
 
 
 override fun onDeleted(context: Context, appWidgetIds: IntArray) {
         // When the user deletes the widget, delete the preference associated with it.
         for (appWidgetId in appWidgetIds) {
-            deletePrefs(context, appWidgetId)
+            eCoalPrefs(context, appWidgetId).deletePrefs()
         }
     }
     override fun onEnabled(context: Context) {
@@ -171,7 +171,7 @@ private fun checkConnection(context: Context, record: eCoalRecord, conSts: Conne
 }
 
 private fun processNotifications(context: Context, record: eCoalRecord, conSts: ConnectionStates, appWidgetId: Int) {
-    val prefs = loadPrefs(context, appWidgetId)
+    val prefs = eCoalPrefs(context, appWidgetId)
     checkFuelLevel(context, record, prefs)
     checkAlarmStatus(context, record)
     checkConnection(context, record, conSts, prefs)
@@ -188,7 +188,6 @@ internal fun updateAppWidget(context: Context, appWidgetManager: AppWidgetManage
 
     if (resultLast != null){
         val lastRecord = eCoalDecoder(resultLast).getLatestRecord()
-        // views.setTextViewText(R.id.appwidget_text, lastRecord.timestamp.toString())
         setConnectionStatus(views, adr.connectionStatus)
         views.setTextViewText(R.id.FuelLevel, lastRecord.fuelLevel.toString())
         views.setTextViewText(R.id.LastRead, lastRecord.timestamp.toString())
