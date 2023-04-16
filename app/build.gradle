@@ -12,7 +12,7 @@ android {
         minSdk 30
         targetSdk 32
         versionCode 1
-        versionName "1.0"
+        versionName "0.9a"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -21,6 +21,22 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        applicationVariants.all{
+                // this method is use to rename your all apk weather
+                // it may be signed or unsigned(debug apk)
+            variant ->
+                variant.outputs.each{
+                        // on below line we are setting a
+                        // name to our apk as GFG.apk
+                    output->
+                        def name = output.outputFileName = "eCoalHelper-v${defaultConfig.versionName}.apk"
+                        // on below line we are setting the
+                        // outputFile Name to our apk file.
+                        output.outputFileName = name
+
+                        //output.outputFileName = "${defaultConfig.applicationId}-v${defaultConfig.versionName}_${variant.flavorName}_${defaultConfig.versionCode}_${new Date().format('yyyy-MM-dd_HH.mm.ss')}.apk"
+                }
         }
     }
     compileOptions {
