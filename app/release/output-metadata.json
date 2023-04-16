@@ -12,8 +12,8 @@
       "filters": [],
       "attributes": [],
       "versionCode": 1,
-      "versionName": "1.0",
-      "outputFile": "app-release.apk"
+      "versionName": "0.9a",
+      "outputFile": "eCoalHelper-v0.9a.apk"
     }
   ],
   "elementType": "File"
