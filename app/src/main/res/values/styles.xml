@@ -1,0 +1,43 @@
+<resources>
+    <style name="Widget.ECoalHelper.AppWidget.Container" parent="android:Widget">
+        <item name="android:id">@android:id/background</item>
+        <item name="android:background">?android:attr/colorBackground</item>
+    </style>
+
+    <style name="Widget.ECoalHelper.AppWidget.InnerView" parent="android:Widget">
+        <item name="android:background">?android:attr/colorBackground</item>
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+    </style>
+
+    <style name="Widget.ECoalHelper.AppWidget.texts" parent="android:Widget">
+        <item name="android:shadowColor">@android:color/black</item>
+        <item name="android:shadowRadius">4</item>
+        <item name="android:padding">1sp</item>
+        <item name="android:textSize">10sp</item>
+        <item name="android:textColor">@android:color/darker_gray</item>
+    </style>
+
+    <style name="Widget.ECoalHelper.AppWidget.NormalText" parent="Widget.ECoalHelper.AppWidget.texts">
+    </style>
+
+    <style name="Widget.ECoalHelper.AppWidget.NormalValueText" parent="Widget.ECoalHelper.AppWidget.texts">
+        <item name="android:singleLine">true</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:gravity">right</item>
+    </style>
+
+    <style name="Widget.ECoalHelper.AppWidget.GoodText" parent="Widget.ECoalHelper.AppWidget.NormalValueText">
+        <item name="android:textColor">@android:color/holo_green_dark</item>
+    </style>
+
+    <style name="Widget.ECoalHelper.AppWidget.WarningText" parent="Widget.ECoalHelper.AppWidget.NormalValueText">
+        <item name="android:textColor">@android:color/holo_orange_dark</item>
+        <item name="android:textStyle">italic</item>
+    </style>
+
+    <style name="Widget.ECoalHelper.AppWidget.CriticalText" parent="Widget.ECoalHelper.AppWidget.NormalValueText">
+        <item name="android:textColor">@android:color/holo_red_dark</item>
+        <item name="android:textStyle">italic|bold</item>
+    </style>
+</resources>
