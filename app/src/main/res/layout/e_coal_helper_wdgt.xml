@@ -63,12 +63,12 @@
             <TextView
                 android:id="@+id/ConnectionState"
                 android:text="OK"
-                style="@style/Widget.ECoalHelper.AppWidget.GoodText"/>
+                style="@style/Widget.ECoalHelper.AppWidget.NormalValueText"/>
 
             <TextView
                 android:id="@+id/FuelLevel"
                 android:text="0"
-                style="@style/Widget.ECoalHelper.AppWidget.CriticalText"/>
+                style="@style/Widget.ECoalHelper.AppWidget.NormalValueText"/>
 
             <TextView
                 android:id="@+id/LoadTime"
@@ -83,7 +83,7 @@
             <TextView
                 android:id="@+id/State"
                 android:text="Alarm"
-                style="@style/Widget.ECoalHelper.AppWidget.CriticalText"/>/>
+                style="@style/Widget.ECoalHelper.AppWidget.NormalValueText"/>/>
         </LinearLayout>
 
     </RelativeLayout>
