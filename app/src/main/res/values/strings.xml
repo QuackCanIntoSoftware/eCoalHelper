@@ -27,4 +27,5 @@
     <string name="lb_fuel_level_alarm">Low fuel level alarm limit</string>
     <string name="lb_timeout">Read timeout (h)</string>
     <string name="toast_invalid_parameters"><![CDATA[Fuel levels shall fit range <0, 100>.\nAlarm level shall be less than warning.\nTimeout shall be grated than 0]]></string>
+    <string name="widget_timestamp">%ta %tb %td %tH:%tM</string>
 </resources>

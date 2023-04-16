@@ -190,8 +190,21 @@ internal fun updateAppWidget(context: Context, appWidgetManager: AppWidgetManage
         val lastRecord = eCoalDecoder(resultLast).getLatestRecord()
         setConnectionStatus(views, adr.connectionStatus)
         views.setTextViewText(R.id.FuelLevel, lastRecord.fuelLevel.toString())
-        views.setTextViewText(R.id.LastRead, lastRecord.timestamp.toString())
-        views.setTextViewText(R.id.LoadTime, lastRecord.nextFuelTime.toString())
+        views.setTextViewText(R.id.LastRead, String.format(context.getString(R.string.widget_timestamp),
+            lastRecord.timestamp,
+            lastRecord.timestamp,
+            lastRecord.timestamp,
+            lastRecord.timestamp,
+            lastRecord.timestamp)
+        )
+
+        views.setTextViewText(R.id.LoadTime, String.format(context.getString(R.string.widget_timestamp),
+            lastRecord.nextFuelTime,
+            lastRecord.nextFuelTime,
+            lastRecord.nextFuelTime,
+            lastRecord.nextFuelTime,
+            lastRecord.nextFuelTime)
+        )
         views.setTextViewText(R.id.State, lastRecord.mode.toString())
 
         processNotifications(context, lastRecord, adr.connectionStatus, appWidgetId)
